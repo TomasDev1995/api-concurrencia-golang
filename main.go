@@ -3,21 +3,43 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
-	"routes" // Importa tu paquete de rutas
+	"golang_with_docker_model_1/db"
+	"golang_with_docker_model_1/routes"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Configura el servidor HTTP
-	router := routes.InitRoutes() // Inicia las rutas desde un paquete separado
-	server := &http.Server{
-		Addr:    ":8080", // Escucha en el puerto 8080
-		Handler: router,  // Usa el router configurado
+	// Cargar las variables de entorno
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error cargando el archivo .env 'godotenv.Load()': %v", err)
 	}
 
-	// Inicia el servidor y maneja errores potenciales
-	log.Println("Starting server on :8080")
+	// Inicializar la base de datos
+	dbConn, err := db.InitDB()
+	if err != nil {
+		log.Fatalf("Error inicializando la base de datos: %v", err)
+	}
+	defer dbConn.Close()
+
+	// Inicializar las rutas
+	router := routes.InitRoutes()
+
+	// Configurar el servidor HTTP
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Valor por defecto
+	}
+
+	server := &http.Server{
+		Addr:    ":" + port,
+		Handler: router,
+	}
+
+	log.Printf("Starting server on :%s", port)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatalf("Could not listen on :8080: %v\n", err)
+		log.Fatalf("Could not listen on :%s: %v\n", port, err)
 	}
 }

@@ -1,14 +1,14 @@
 package routes
 
 import (
-	"api-concurrencia-golang/controllers"
-	"gorilla/mux" // Ejemplo usando Gorilla Mux como router
+	"golang_with_docker_model_1/controllers"
+
+	"github.com/gorilla/mux"
 )
 
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
 
-	// Define tus rutas aquí
 	router.HandleFunc("/api/v1/resource", controllers.GetResource).Methods("GET")
 	router.HandleFunc("/api/v1/resource", controllers.CreateResource).Methods("POST")
 
