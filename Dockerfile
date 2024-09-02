@@ -31,4 +31,4 @@ COPY --from=builder /app/main /app/main
 ENTRYPOINT ["/app/main"]
 
 # Expone el puerto en el que tu aplicación escucha
-EXPOSE 80
+EXPOSE 90
