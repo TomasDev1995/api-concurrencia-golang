@@ -1,13 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"golang_with_docker_model_1/controllers"
 	"golang_with_docker_model_1/db"
+	repository "golang_with_docker_model_1/repositories"
 	"golang_with_docker_model_1/routes"
+	service "golang_with_docker_model_1/services"
 )
 
 func main() {
@@ -19,8 +21,12 @@ func main() {
 	}
 	defer dbConn.Close()
 
+	repo := repository.NewPostgresResourceRepository(dbConn)
+	svc := service.NewAppResourceService(repo)
+	handler := controllers.NewResourceHandler(svc)
+
 	// Inicializar las rutas
-	router := routes.InitRoutes()
+	router := routes.InitRoutes(handler)
 
 	// Configurar el servidor HTTP
 	port := os.Getenv("PORT")
@@ -38,5 +44,4 @@ func main() {
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("Could not listen on :%s: %v\n", port, err)
 	}
-	fmt.Print("Definiendo variables de entorno.")
 }

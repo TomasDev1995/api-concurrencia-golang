@@ -6,11 +6,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func InitRoutes() *mux.Router {
+func InitRoutes(handler *controllers.ResourceHandler) *mux.Router {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/api/v1/resource", controllers.GetResource).Methods("GET")
-	router.HandleFunc("/api/v1/resource", controllers.CreateResource).Methods("POST")
+	router.HandleFunc("/resource", handler.CreateResource).Methods("POST")
 
 	return router
 }
