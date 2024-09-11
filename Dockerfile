@@ -27,6 +27,9 @@ RUN apk --no-cache add ca-certificates
 # Copia el binario desde la etapa de construcción
 COPY --from=builder /app/main /app/main
 
+# Copia el archivo .env desde la etapa de construcción
+COPY --from=builder /app/.env /app/.env
+
 # Define el comando por defecto para ejecutar el binario
 ENTRYPOINT ["/app/main"]
 

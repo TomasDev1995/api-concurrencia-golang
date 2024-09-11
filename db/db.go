@@ -42,8 +42,9 @@ func InitDB() (*sql.DB, error) {
 	}
 
 	// Construir la cadena de conexión a la base de datos
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	//connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	connStr := "user=taguilera password=taguilera1995 dbname=golang_with_docker_model_1_db sslmode=disable host=db"
 
 	// Abrir la conexión a la base de datos
 	db, err := sql.Open("postgres", connStr)

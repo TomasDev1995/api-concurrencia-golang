@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    entrypoint: ["sleep", "infinity"]
     ports:
       - "8080:90"
     depends_on:
